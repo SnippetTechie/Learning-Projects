@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testing</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div>
+      <input type="text" id="A" placeholder="Enter the value of a" />
+      <br />
+      <br />
+      <input type="text" id="B" placeholder="Enter the value of b" />
+    </div>
+    <br />
+    <button onclick="sendRequest()">Find sum</button>
+    <br />
+    <br />
+    <div id="result"></div>
+  <script>
+        async function sendRequest(){
+            const a_val = document.getElementById("A").value;
+            const b_val = document.getElementById("B").value;
+            const response = await axios.post("http://localhost:3000/sum", {
+                a : a_val,  
+                b : b_val
+            })
+          document.getElementById("result").innerHTML = 
+          "Answer : " + response.data.ans;
+          }
+    </script>
+  </body>
+</html>
+
+
+** npx serve command to get the local http server of this file **
