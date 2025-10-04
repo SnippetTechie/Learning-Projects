@@ -109,12 +109,11 @@ app.post("/signin", (req, res) => {
   }
 
   // Adding stateless token 
-
+  
   if (foundUser) {
     const token = jwt.sign({
-        username: username
-    }, JWT_SECRET);  //converts the username into a jwt
-    
+      username: username}, JWT_SECRET);  //converts the username into a jwt
+    console.log(foundUser)
     // foundUser.token = token; 
 
     res.send({
@@ -127,14 +126,27 @@ app.post("/signin", (req, res) => {
   }
 });
 
-app.get("/me", (req, res) => {
+function auth(req, res, next){
   const token = req.headers.token;
-  const decodeInformation = jwt.verify(token, JWT_SECRET);
-  const username = decodeInformation.username
+  const decodedInfo = jwt.verify(token, JWT_SECRET);
+
+  if(decodedInfo.username){
+    req.username = decodedInfo.username;
+    next();
+  }
+  else{
+    res.send({
+      "message": "You are not signed in"
+    })
+  }
+}
+
+app.get("/me", auth, (req, res) => {
+
   let foundUser = null;
 
   for (let i = 0; i < user.length; i++) {
-    if (user[i].username == username) {
+    if (user[i].username == req.username){
       foundUser = user[i];
     }
   }
@@ -144,12 +156,7 @@ app.get("/me", (req, res) => {
       username: foundUser.username,
       password: foundUser.password
     });
-
-  } else {
-    res.json({
-      message: "token invalid",
-    });
-  }
+  } 
 });
 
 app.listen(3000, () => {
