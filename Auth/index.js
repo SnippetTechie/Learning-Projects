@@ -1,9 +1,11 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = "mynameismohammedtahir"
-app.use(express.json());
 
+app.use(express.json());
+app.use(cors());
 const user = [];
 
 app.get("/", (req, res) => {
@@ -94,7 +96,7 @@ app.post("/signup", (req, res) => {
   });
 
   res.json({
-    Message: "You have signed up",
+    "message": "You have signed up",
   });
 });
 
