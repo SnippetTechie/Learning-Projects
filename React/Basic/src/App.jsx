@@ -1,24 +1,37 @@
 import { useState, useEffect } from "react";
 
 function App() {
-  return (
-    <div>
-      <Counter></Counter>
-    </div>
-  );
+  const[ComponentVisibility, SetCountVisi] = useState(true);
+  useEffect(()=>{
+    setInterval(()=>{
+      SetCountVisi( c=>!c);
+    }, 3000)
+  }, [])
+
+  return <div>
+    <h1>Heyyy</h1>
+    {ComponentVisibility ? <Counter></Counter>: null}
+    <b>Hope this is visible</b>
+  </div>
 }
 
 function Counter() {
   const [count, setCount] = useState(0);
 
-  console.log("Inside the counter component");
+  console.log("COUNTER!");
 
   useEffect(() => {
-    setInterval(() => {
+    let clock = setInterval(() => {
       setCount((count) => count + 1);
     }, 1000);
     console.log("Inside UseEffect 'Mounted' ");
+
+    return (() => {
+      console.log("On unmount");
+      clearInterval(clock);
+    })
   }, []);
+
 
   return (
     <div>
